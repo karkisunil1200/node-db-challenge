@@ -23,11 +23,6 @@ exports.up = function(knex) {
           .references('id')
           .inTable('projects');
 
-        tbl
-          .string('name')
-          .notNullable()
-          .unique();
-
         tbl.string('description').notNullable();
         tbl.string('notes').notNullable();
         tbl.boolean('completed').notNullable();
@@ -35,6 +30,12 @@ exports.up = function(knex) {
       //Resources
       .createTable('resources', tbl => {
         tbl.increments();
+
+        tbl
+          .integer('project_id')
+          .notNullable()
+          .reference('id')
+          .inTable('projects');
 
         tbl
           .string('name')
