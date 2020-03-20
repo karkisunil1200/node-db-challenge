@@ -1,5 +1,5 @@
 const express = require('express');
-// const projectRouter = require('./api/projects-router');
+const projectRouter = require('./api/projects-router');
 
 const server = express();
 
@@ -9,6 +9,6 @@ server.get('/', (req, res) => {
   res.send(`<h2>Welcome to your homepage</h2>`);
 });
 
-// server.use('/api/projects', projectRouter);
+server.use('/api/projects', projectRouter);
 
 module.exports = server;

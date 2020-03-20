@@ -6,12 +6,12 @@ exports.up = function(knex) {
         tbl.increments();
 
         tbl
-          .string('project_name')
+          .string('name')
           .notNullable()
           .unique();
 
         tbl.string('description');
-        tbl.bool('completed', false);
+        tbl.bool('completed').defaultTo(false);
       })
 
       //Tasks
@@ -22,21 +22,25 @@ exports.up = function(knex) {
           .integer('project_id')
           .notNullable()
           .references('id')
-          .inTable('projects');
+          .inTable('projects')
+          .onDelete('RESTRICT')
+          .onUpdate('CASCADE');
 
         tbl.string('description', 4000).notNullable();
         tbl.string('notes');
-        tbl.bool('completed', false).notNullable();
+        tbl.bool('completed').defaultTo(false);
       })
       //Resources
       .createTable('resources', tbl => {
         tbl.increments();
 
-        // tbl
-        //   .integer('project_id')
-        //   .notNullable()
-        //   .references('id')
-        //   .inTable('projects');
+        tbl
+          .integer('project_id')
+          .notNullable()
+          .references('id')
+          .inTable('projects')
+          .onDelete('RESTRICT')
+          .onUpdate('CASCADE');
 
         tbl
           .string('name')
@@ -48,7 +52,7 @@ exports.up = function(knex) {
       })
 
       //Project Resource
-      .createTable('projectResource', tbl => {
+      .createTable('connectionTable', tbl => {
         tbl
           .integer('project_id')
           .notNullable()
@@ -56,13 +60,15 @@ exports.up = function(knex) {
           .inTable('projects')
           .onDelete('RESTRICT')
           .onUpdate('CASCADE');
-        // tbl
-        //   .integer('task_id')
-        //   .notNullable()
-        //   .references('id')
-        //   .inTable('tasks');
         tbl
-          .integer('resource_id')
+          .integer('task_id')
+          .notNullable()
+          .references('id')
+          .inTable('tasks')
+          .onDelete('RESTRICT')
+          .onUpdate('CASCADE');
+        tbl
+          .integer('resources_id')
           .notNullable()
           .references('id')
           .inTable('resources')
@@ -74,7 +80,7 @@ exports.up = function(knex) {
 
 exports.down = function(knex) {
   return knex.schema
-    .dropTableIfExists('projectResource')
+    .dropTableIfExists('connectionTable')
     .dropTableIfExists('resources')
     .dropTableIfExists('tasks')
     .dropTableIfExists('projects');

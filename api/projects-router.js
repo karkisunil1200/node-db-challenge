@@ -1,11 +1,12 @@
 const express = require('express');
 
-const Projects = require('./projects-model');
+const projects = require('./projects-model');
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  Projects.addResources()
+  projects
+    .getProjects()
     .then(projects => {
       res.status(200).json(projects);
     })
@@ -14,8 +15,31 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/task', (req, res) => {
-  Projects.getTask()
+// router.get('/:id', (req, res) => {
+//   projects
+//     .getProjectById(req.params.id)
+//     .then(project => {
+//       res.status(200).json(project);
+//     })
+//     .catch(err => {
+//       res.status(500).json({message: 'No project found', error: err.message});
+//     });
+// });
+
+router.get('/tasks', (req, res) => {
+  projects
+    .getTask()
+    .then(task => {
+      res.status(200).json(task);
+    })
+    .catch(err => {
+      res.status(500).json({message: 'No task found', error: err.message});
+    });
+});
+
+router.get('/:id/tasks', (req, res) => {
+  projects
+    .getTaskById(req.params.id)
     .then(task => {
       res.status(200).json(task);
     })
@@ -25,7 +49,8 @@ router.get('/task', (req, res) => {
 });
 
 router.get('/resources', (req, res) => {
-  Projects.getResources()
+  projects
+    .getResources()
     .then(resources => {
       res.status(200).json(resources);
     })
@@ -34,8 +59,11 @@ router.get('/resources', (req, res) => {
     });
 });
 
-router.post('/task', (req, res) => {
-  Projects.addTask()
+router.post('/:id/tasks', (req, res) => {
+  const body = req.body;
+  const id = req.params.id;
+  projects
+    .addTask(id, body)
     .then(task => {
       res.status(200).json(task);
     })
@@ -44,8 +72,9 @@ router.post('/task', (req, res) => {
     });
 });
 
-router.post('/resources', (req, res) => {
-  Projects.addResources()
+router.post('/:id/resources', (req, res) => {
+  projects
+    .addResource(req.params.id, req.body)
     .then(resources => {
       res.status(200).json(resources);
     })
@@ -54,4 +83,4 @@ router.post('/resources', (req, res) => {
     });
 });
 
-router.module.exports = router;
+module.exports = router;
