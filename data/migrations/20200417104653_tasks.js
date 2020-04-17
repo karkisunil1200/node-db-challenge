@@ -2,7 +2,7 @@ exports.up = function(knex) {
   return knex.schema.createTable('tasks', tbl => {
     tbl.increments();
 
-    tbl.string('description').notNullable();
+    tbl.string('description');
     tbl.string('notes');
     tbl.bool('completed').defaultTo(false);
 
