@@ -5,6 +5,9 @@
   "repository": "https://github.com/karkisunil1200/node-db-challenge.git",
   "author": "Sunil Karki <karkisunil1200@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "server": "nodemon index.js"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "knex": "^0.21.1",
